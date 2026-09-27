@@ -35,7 +35,7 @@ export default function Command({ arguments: args }: LaunchProps<{ arguments: { 
 
   const retry = <Action title="Try Again" onAction={() => setAttempt((value) => value + 1)} shortcut={{ modifiers: ['cmd'], key: 'r' }} />
   return (
-    <List isLoading={loading} isShowingDetail={suggestions.length > 0} navigationTitle="Spelling Suggestions" searchBarPlaceholder="Filter suggestions…">
+    <List isLoading={loading} navigationTitle="Spelling Suggestions" searchBarPlaceholder="Filter suggestions…">
       <List.EmptyView title={loading ? 'Checking spelling…' : 'Could not check spelling'} description={error || `Running ${shortcutName}`} actions={!loading ? <ActionPanel>{retry}</ActionPanel> : undefined} />
       <List.Section title="Suggestions" subtitle={!loading && suggestions.length < 3 ? `${suggestions.length} distinct suggestions returned` : undefined}>
         {suggestions.map((item) => (
@@ -43,7 +43,7 @@ export default function Command({ arguments: args }: LaunchProps<{ arguments: { 
             key={item.suggestion}
             title={item.suggestion}
             keywords={[item.definition]}
-            detail={<List.Item.Detail metadata={<List.Item.Detail.Metadata><List.Item.Detail.Metadata.Label title="Definition" text={item.definition} /></List.Item.Detail.Metadata>} />}
+            subtitle={item.definition}
             actions={<ActionPanel>
               <Action.CopyToClipboard title="Copy Correction" content={item.suggestion} />
               <Action.Paste title="Paste Correction" content={item.suggestion} shortcut={{ modifiers: ['cmd'], key: 'return' }} />

@@ -4,7 +4,7 @@ Spell-check text in Raycast using the macOS Shortcut `spelling` and Apple's on-d
 
 ## Use
 
-Run **AI Spell**, enter text in its argument, and select a suggestion. **Enter** copies the correction; **Cmd+Enter** pastes it into the active app. **Cmd+R** retries. Definitions appear beside the suggestions.
+Run **AI Spell**, enter text in its argument, and select a suggestion. **Enter** copies the correction; **Cmd+Enter** pastes it into the active app. **Cmd+R** retries. Definitions appear inline as subtitles beside each suggestion.
 
 The Shortcut must accept text input and return plain text containing exactly three objects:
 
