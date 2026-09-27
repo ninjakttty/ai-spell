@@ -28,9 +28,11 @@ Input is written to a private temporary file for `shortcuts run spelling --input
 
 ```sh
 npm install
+npm run typecheck
 npm run build
-npm run lint
 npm run dev
 ```
 
-`build` and `lint` currently both run TypeScript validation; no separate ESLint setup is installed. `npx ray build` bundles and imports the extension into Raycast. Open the AI Spell command in Raycast to verify copy/paste interaction.
+`typecheck` validates TypeScript. `build` bundles the extension for Raycast, and `dev` starts development with live rebuilding. No separate linter is configured. Open the AI Spell command in Raycast to verify copy/paste interaction.
+
+The extension only needs Node.js and the macOS Shortcut; no Python environment or downloaded model is required. The editable icon source and its PNG live in `assets/`.

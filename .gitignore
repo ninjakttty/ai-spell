@@ -1,2 +1,7 @@
-.vscode
-node_modules
+node_modules/
+.vscode/
+.DS_Store
+dist/
+*.tsbuildinfo
+.venv/
+__pycache__/
