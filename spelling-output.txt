@@ -1,0 +1,16 @@
+```json
+[
+    {
+        "suggestion": "definitely",
+        "definition": "used to indicate that something is certain or true"
+    },
+    {
+        "suggestion": "definitly",
+        "definition": "incorrect spelling of 'definitely'"
+    },
+    {
+        "suggestion": "definitly",
+        "definition": "incorrect spelling of 'definitely'"
+    }
+]
+```

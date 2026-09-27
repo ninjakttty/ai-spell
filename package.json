@@ -1,0 +1,58 @@
+{
+  "name": "ai-spell",
+  "title": "AI Spell",
+  "description": "Spell-check text using Apple Silicon on-device AI",
+  "author": "Yuri",
+  "license": "MIT",
+  "icon": "command-icon.png",
+  "version": "1.0.0",
+  "categories": [
+    "Productivity"
+  ],
+  "keywords": [
+    "spell",
+    "grammar",
+    "ai",
+    "apple silicon"
+  ],
+  "private": true,
+  "scripts": {
+    "dev": "ray dev",
+    "build": "tsc --noEmit",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@raycast/api": "^2.5.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.0.10",
+    "typescript": "^5.7.3"
+  },
+  "commands": [
+    {
+      "name": "check-text",
+      "title": "AI Spell",
+      "description": "Check and fix text with on-device Apple Silicon AI",
+      "mode": "view",
+      "preferences": [
+        {
+          "name": "shortcutName",
+          "type": "textfield",
+          "title": "Siri Shortcut Name",
+          "description": "Exact macOS Shortcut name to run",
+          "default": "spelling",
+          "required": false
+        }
+      ],
+      "arguments": [
+        {
+          "name": "text",
+          "type": "text",
+          "placeholder": "Text to spell-check",
+          "required": true
+        }
+      ]
+    }
+  ]
+}
