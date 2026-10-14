@@ -13,7 +13,7 @@ export function parseSuggestions(raw: string): Suggestion[] {
   try {
     parsed = JSON.parse(text)
   } catch {
-    throw new Error('The Shortcut returned invalid JSON. Ask it to return an array of suggestion and definition objects.')
+    throw new Error('The Shortcut returned invalid JSON. Ask it to return an array of word and definition objects.')
   }
   const rows = Array.isArray(parsed) ? parsed :
     parsed && typeof parsed === 'object' && 'suggestions' in parsed ? parsed.suggestions : null
@@ -21,8 +21,10 @@ export function parseSuggestions(raw: string): Suggestion[] {
   const seen = new Set<string>()
   const results: Suggestion[] = []
   for (const row of rows) {
-    if (!row || typeof row !== 'object' || typeof row.suggestion !== 'string' || typeof row.definition !== 'string') continue
-    const suggestion = row.suggestion.trim()
+    if (!row || typeof row !== 'object' || typeof row.definition !== 'string') continue
+    const value = typeof row.word === 'string' ? row.word : row.suggestion
+    if (typeof value !== 'string') continue
+    const suggestion = value.trim()
     const definition = row.definition.trim()
     const key = suggestion.normalize('NFKC').toLowerCase().replace(/\s+/g, ' ')
     if (!suggestion || !definition || seen.has(key)) continue

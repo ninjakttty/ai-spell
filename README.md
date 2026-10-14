@@ -10,15 +10,38 @@ The Shortcut must accept text input and return plain text containing exactly thr
 
 ```json
 [
-  { "suggestion": "their", "definition": "Belonging to them." },
-  { "suggestion": "there", "definition": "In or at that place." },
-  { "suggestion": "they’re", "definition": "A contraction of they are." }
+  { "word": "their", "definition": "Belonging to them." },
+  { "word": "there", "definition": "In or at that place." },
+  { "word": "they’re", "definition": "A contraction of they are." }
 ]
 ```
 
 The extension accepts a JSON array or an object with a `suggestions` array, including Markdown-fenced JSON. Invalid entries and duplicate suggestions are skipped, with at most three distinct results displayed. Fewer than three valid results are shown honestly rather than padded. Invalid or empty responses show an error and a retry action.
 
 Change the Shortcut name in the command's **Siri Shortcut Name** preference if needed.
+
+## Shortcut prompt
+
+The `spelling` Shortcut uses this prompt:
+
+```text
+Provide spelling suggestions for the following Shortcut Input:
+
+Return exactly 3 suggestions as valid JSON using this schema:
+
+[
+  {
+    "word": "suggested spelling",
+    "definition": "brief definition"
+  }
+]
+
+Return only the JSON array. Do not include Markdown, code fences, explanations, or any other text.
+
+Rank suggestions from most likely to least likely.
+```
+
+The extension accepts `word` from this prompt and also supports the older `suggestion` field. If both fields are strings, `word` takes precedence. Suggestions retain the order returned by the Shortcut.
 
 ## Implementation
 
