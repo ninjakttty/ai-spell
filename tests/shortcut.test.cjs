@@ -26,13 +26,12 @@ const row = (word) => ({ word, definition: `Definition of ${word}` })
 const json = (rows) => JSON.stringify(rows)
 const plain = (value) => JSON.parse(JSON.stringify(value))
 
-test('accepts the prompt schema and legacy field, preserving rank', async () => {
+test('accepts the word and definition schema, preserving rank', async () => {
   const { parseSuggestions } = await loadShortcut()
-  assert.deepEqual(plain(parseSuggestions(json([row('their'), { suggestion: 'there', definition: 'A place' }]))), [
+  assert.deepEqual(plain(parseSuggestions(json([row('their'), { word: 'there', definition: 'A place' }]))), [
     { suggestion: 'their', definition: 'Definition of their' },
     { suggestion: 'there', definition: 'A place' },
   ])
-  assert.equal(parseSuggestions(json([{ ...row('their'), suggestion: 'there' }]))[0].suggestion, 'their')
 })
 
 test('accepts BOM, code fences, and a suggestions wrapper', async () => {
@@ -53,7 +52,7 @@ test('rejects malformed JSON, wrong shapes, and responses without valid rows', a
   for (const input of ['null', '{}', '{"suggestions":{}}']) {
     assert.throws(() => parseSuggestions(input), /must contain an array/)
   }
-  for (const input of ['[]', '[{"word":"their"}]', '[{"word":42,"definition":"x"}]']) {
+  for (const input of ['[]', '[{"word":"their"}]', '[{"word":42,"definition":"x"}]', '[{"suggestion":"their","definition":"x"}]']) {
     assert.throws(() => parseSuggestions(input), /no valid suggestions/)
   }
 })

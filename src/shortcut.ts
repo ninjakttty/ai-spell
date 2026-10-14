@@ -21,10 +21,8 @@ export function parseSuggestions(raw: string): Suggestion[] {
   const seen = new Set<string>()
   const results: Suggestion[] = []
   for (const row of rows) {
-    if (!row || typeof row !== 'object' || typeof row.definition !== 'string') continue
-    const value = typeof row.word === 'string' ? row.word : row.suggestion
-    if (typeof value !== 'string') continue
-    const suggestion = value.trim()
+    if (!row || typeof row !== 'object' || typeof row.word !== 'string' || typeof row.definition !== 'string') continue
+    const suggestion = row.word.trim()
     const definition = row.definition.trim()
     const key = suggestion.normalize('NFKC').toLowerCase().replace(/\s+/g, ' ')
     if (!suggestion || !definition || seen.has(key)) continue

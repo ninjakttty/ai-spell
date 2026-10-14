@@ -60,7 +60,15 @@ The build writes the extension bundle into Raycast's local extensions directory.
 
 ## Usage
 
-Open **AI Spell**, enter a word or short text in its argument, and wait for suggestions. Select a result and use:
+Open **AI Spell**, enter a word or short text in its argument, and wait for suggestions.
+
+![AI Spell in Raycast with “heelo” entered as the text to check](assets/ai-spell-input.png)
+
+Suggestions appear with brief definitions:
+
+![AI Spell results showing three spelling suggestions with definitions](assets/ai-spell-results.png)
+
+Select a result and use:
 
 | Key | Action |
 | --- | --- |
@@ -91,7 +99,7 @@ Return only the JSON array. Do not include Markdown, code fences, explanations, 
 Rank suggestions from most likely to least likely.
 ```
 
-This is a request to the model, not a guarantee of valid JSON or exactly three results. The extension accepts `word` and the older `suggestion` field; a string `word` takes precedence when both exist. It also accepts a `suggestions` wrapper and Markdown-fenced JSON. Invalid entries and duplicates are skipped. Fewer than three valid suggestions are displayed without padding; an empty or unusable response is an error, not a reliable indication that the input is already correct.
+This is a request to the model, not a guarantee of valid JSON or exactly three results. Each entry must contain nonempty `word` and `definition` strings. The extension also accepts a `suggestions` wrapper and Markdown-fenced JSON. Invalid entries and duplicates are skipped. Fewer than three valid suggestions are displayed without padding; an empty or unusable response is an error, not a reliable indication that the input is already correct.
 
 ## Troubleshooting
 
@@ -127,7 +135,7 @@ Before sharing a changed export, inspect its actions and confirm it contains no 
 
 ## Codex during development
 
-Codex was used to review the repository, document its implementation, and fix a mismatch between the Shortcut's `word` field and the extension's expected `suggestion` field. The fix was checked with parser exercises, TypeScript checking, and a Raycast build; the maintainer then confirmed that the extension worked.
+Codex was used to review the repository, document its implementation, and align the extension's response parsing with the Shortcut's JSON schema. The fix was checked with parser exercises, TypeScript checking, and a Raycast build; the maintainer then confirmed that the extension worked.
 
 Codex also assisted with the focused reliability cleanup, automated tests, and publication documentation in this repository. These are documented uses of Codex; they do not describe how the original prototype was developed.
 
