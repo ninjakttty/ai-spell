@@ -1,7 +1,7 @@
 {
   "name": "ai-spell",
   "title": "AI Spell",
-  "description": "Spell-check text using Apple Silicon on-device AI",
+  "description": "Spelling suggestions through macOS Shortcuts and Apple Intelligence",
   "author": "Yuri",
   "license": "MIT",
   "icon": "command-icon.png",
@@ -34,7 +34,7 @@
     {
       "name": "check-text",
       "title": "AI Spell",
-      "description": "Check and fix text with on-device Apple Silicon AI",
+      "description": "Get spelling suggestions and definitions through macOS Shortcuts",
       "mode": "view",
       "preferences": [
         {
