@@ -24,6 +24,7 @@ The extension makes no direct model API calls and contains no API keys. The incl
 
 ## Requirements
 
+- The macOS Shortcuts app must be available, with the included `spelling` Shortcut imported and configured.
 - An Apple Intelligence-capable Mac (M1 or later) with macOS Tahoe 26 or later, including the **Use Model** action in Shortcuts.
 - Apple Intelligence enabled, with the required model downloaded and a supported language and region. See [Apple's availability and requirements](https://support.apple.com/en-us/121115).
 - Raycast for macOS with extension development support.
