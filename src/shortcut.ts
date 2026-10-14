@@ -88,6 +88,8 @@ export const runShortcut = async (
   const directory = await mkdtemp(path.join(tmpdir(), 'ai-spell-'))
 
   try {
+    // The Shortcut cannot return its response directly to the extension, so we read it from a file.
+    // Input also uses a file to pass arbitrary text without command-line length or quoting constraints.
     const input = path.join(directory, 'input.txt')
     await writeFile(input, text, { encoding: 'utf8', mode: 0o600 })
 
