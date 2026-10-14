@@ -18,6 +18,7 @@ export const Command = ({
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string>()
   const [attempt, setAttempt] = useState(0)
+
   const { shortcutName: preferredShortcutName } = getPreferenceValues<{
     shortcutName?: string
   }>()
@@ -29,13 +30,17 @@ export const Command = ({
     setLoading(true)
     setError(undefined)
     setSuggestions([])
+
     const check = async () => {
       try {
         if (!text) throw new Error('Enter some text to spell-check.')
+
         const results = await runShortcut(text, shortcutName, controller.signal)
+
         if (!controller.signal.aborted) setSuggestions(results)
       } catch (cause) {
         if (controller.signal.aborted) return
+
         const message = cause instanceof Error ? cause.message : String(cause)
         setError(message)
         await showToast({
@@ -47,12 +52,15 @@ export const Command = ({
         if (!controller.signal.aborted) setLoading(false)
       }
     }
+
     void check()
+
     return () => controller.abort()
   }, [text, shortcutName, attempt])
 
   let emptyTitle = 'No matching suggestions'
   let emptyDescription = 'Try a different filter.'
+
   if (loading) {
     emptyTitle = 'Checking spelling…'
     emptyDescription = `Running ${shortcutName}`
@@ -61,6 +69,8 @@ export const Command = ({
     emptyDescription = error
   }
 
+  const hasFewerSuggestions = !loading && suggestions.length < 3
+
   const retry = (
     <Action
       title="Try Again"
@@ -68,6 +78,7 @@ export const Command = ({
       shortcut={{ modifiers: ['cmd'], key: 'r' }}
     />
   )
+
   return (
     <List
       isLoading={loading}
@@ -82,7 +93,7 @@ export const Command = ({
       <List.Section
         title="Suggestions"
         subtitle={
-          !loading && suggestions.length < 3
+          hasFewerSuggestions
             ? `${suggestions.length} distinct suggestions returned`
             : undefined
         }

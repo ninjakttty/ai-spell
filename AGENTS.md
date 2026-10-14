@@ -2,26 +2,27 @@
 
 AI Spell is intentionally a small Raycast utility. Preserve the Raycast → macOS Shortcuts → Apple Intelligence integration and the existing functionality. Do not replace Shortcuts with a direct model API.
 
-## Formatting
+## Formatting and code style
 
-- No semicolons.
-- Single quotes in JavaScript and TypeScript.
+- In JavaScript and TypeScript, omit semicolons and use single quotes for strings. Use template literals when interpolation or multiline content warrants them.
 - Double quotes in JSX and HTML.
-- Two-space indentation.
+- Use 2-space indentation by default.
 - Trailing commas wherever supported.
-- Use blank lines to separate logical blocks of code.
-- Respect the repository's Prettier and ESLint configurations. Update them when necessary to maintain these conventions.
+- Prefer arrow functions in JavaScript and TypeScript when they fit the existing code and do not change required behavior, such as `this` binding or hoisting.
+- Put one blank line between adjacent function declarations, function expressions assigned to variables, and class methods.
+- Put one blank line between distinct logical blocks inside a function, such as input validation, preparation, the main operation, and the return value.
+- Do not insert blank lines between tightly related statements or add multiple consecutive blank lines.
+- Use clear, descriptive names and follow the naming conventions of the surrounding code.
+- Respect the repository's Prettier and ESLint configurations. Update them when necessary to maintain these conventions. Let the configured formatter and linter resolve formatting conflicts. Do not reformat unrelated code.
 - Do not manually edit generated `raycast-env.d.ts` or format generated files and assets excluded by `.prettierignore`.
 
 ## JavaScript and TypeScript
 
-- Prefer arrow functions unless a regular function is semantically necessary.
 - Prefer `const`; use `let` only when reassignment is required.
 - Prefer destructuring, but avoid excessively deep destructuring.
 - Use optional chaining and nullish coalescing where appropriate. Preserve intentional fallbacks for empty strings, such as the Shortcut-name preference.
 - Prefer `async/await` over promise chains.
 - Prefer array methods over explicit loops when they improve readability. Keep loops when early exit or stateful validation is clearer.
-- Use guard clauses and early returns instead of deeply nested conditionals.
 - Avoid complicated nested ternaries.
 - Use TypeScript pragmatically. Prefer inference over unnecessary explicit annotations.
 - Avoid overly complex generic types and unnecessary type abstractions.
@@ -44,24 +45,28 @@ AI Spell is intentionally a small Raycast utility. Preserve the Raycast → macO
 - Prefer Tailwind CSS for web interfaces, keeping utility classes inline unless reuse justifies extraction. This project uses Raycast native UI components; do not add Tailwind for them.
 - Maintain accessibility and keyboard actions.
 
-## Code quality
+## Implementation
 
-- Keep functions focused and readable.
-- Avoid premature abstraction and remove unnecessary complexity and duplication.
-- Write comments explaining why, not narrating what.
-- Handle errors defensively and preserve useful diagnostic information.
+- Prefer guard clauses and early returns to deeply nested conditionals.
+- Extract compound or multiline conditions into descriptively named boolean variables so `if` statements stay simple. For example, compute `isValidRow` from the row checks, then use `if (!isValidRow)` as the guard clause. Keep straightforward single checks inline.
+- Keep functions focused on a single responsibility and control flow easy to follow.
+- Choose the simplest implementation that meets the requirements. Avoid speculative abstractions and premature optimization.
+- Reuse existing helpers and patterns before adding new ones.
+- Handle errors explicitly where they can be handled meaningfully and preserve useful diagnostic information.
 - Never silently swallow unexpected errors. Treat cancellation and an absent optional output file as explicit, documented cases.
-- Prefer established dependencies over reinventing functionality, but do not introduce dependencies unnecessarily.
+- Prefer established dependencies over reinventing functionality. Add dependencies only when their benefit justifies the cost and existing tools cannot reasonably solve the problem.
+- Add comments to explain intent, constraints, or non-obvious decisions, rather than restating the code.
 - Do not log submitted text or model responses.
 - Do not claim that model output is guaranteed to follow the JSON schema or that the entire workflow is private or on-device without verification.
 
-## Testing and validation
+## Tests and validation
 
-- Preserve existing behavior.
-- Add or update tests when behavior changes.
-- Focus tests on observable behavior and meaningful edge cases.
+- Add or update meaningful tests for new behavior and bug fixes, using the project's existing test tools and conventions.
+- For bug fixes, add a regression test when practical.
+- Test observable behavior and relevant edge cases. Avoid tests that merely mirror the implementation.
+- Do not add tests solely for formatting, documentation, or other changes with no executable behavior.
 - Follow the existing Node test-runner conventions in `tests/shortcut.test.cjs`. Mock Shortcut execution in automated tests.
-- Run the relevant validation commands before finishing:
+- Run relevant tests and required project checks, including linting or type checking where applicable. The available validation commands are:
 
   ```sh
   npm run format:check
@@ -73,16 +78,27 @@ AI Spell is intentionally a small Raycast utility. Preserve the Raycast → macO
 
 - Use `npm run format` to apply formatting when needed.
 - The build writes to Raycast's local extensions directory and may require additional filesystem permission.
-- Report failed checks and anything that cannot be verified automatically, including interactive import or copy/paste behavior.
+- If a check fails, determine whether the failure comes from the change or is pre-existing. Fix failures introduced by the change.
+- If validation cannot run, state what was not checked and why. Never claim an unperformed check passed.
+- Report anything that cannot be verified automatically, including interactive import or copy/paste behavior.
+- Update documentation when the change affects documented behavior or usage.
 
-## Scope and delivery
+## Scope and changes
 
-- Make focused, incremental changes.
+- Make focused, incremental changes that directly address the request.
 - Do not introduce unnecessary architectural changes or unrelated features.
-- Preserve public APIs and existing functionality.
+- Preserve public APIs and existing behavior outside the requested scope.
+- Avoid unrelated cleanup, broad refactoring, file renames, and dependency upgrades.
+- Preserve the user's existing work. Do not overwrite or revert unrelated changes.
+- Resolve routine implementation details using project context. Ask for clarification when an ambiguity materially affects the outcome.
 - Respect existing conventions where changing them would introduce unnecessary disruption.
-- Update documentation when behavior or APIs change.
 - Remove debugging statements and temporary code.
 - Do not invent details about how Codex was used during original development. Document only established or user-confirmed uses.
 - Do not commit, push, or publish unless the user explicitly requests it.
-- Finish with a concise summary of changes, significant decisions or trade-offs, and validation results.
+
+## Communication
+
+- Keep progress updates concise and useful. Share meaningful findings, blockers, and decisions.
+- In the final response, briefly explain what changed and how it was validated.
+- Mention significant decisions, trade-offs, remaining limitations, or required follow-up when relevant.
+- Avoid lengthy walkthroughs or implementation detail unless requested or needed to understand the result.

@@ -8,6 +8,7 @@ export type Suggestion = {
   suggestion: string
   definition: string
 }
+
 const execute = promisify(execFile)
 
 export const parseSuggestions = (raw: string): Suggestion[] => {
@@ -27,44 +28,53 @@ export const parseSuggestions = (raw: string): Suggestion[] => {
     )
   }
 
-  let rows: unknown = parsed
-  if (
-    parsed &&
-    typeof parsed === 'object' &&
-    'suggestions' in parsed &&
-    !Array.isArray(parsed)
-  ) {
-    rows = parsed.suggestions
-  }
-  if (!Array.isArray(rows))
+  const response = parsed
+  const hasSuggestionsWrapper =
+    response !== null &&
+    typeof response === 'object' &&
+    'suggestions' in response &&
+    !Array.isArray(response)
+  const rows = hasSuggestionsWrapper ? response.suggestions : response
+
+  if (!Array.isArray(rows)) {
     throw new Error(
       'The Shortcut response must contain an array of suggestions.',
     )
+  }
+
   const seen = new Set<string>()
   const results: Suggestion[] = []
 
   for (const row of rows) {
-    if (
-      !row ||
-      typeof row !== 'object' ||
-      typeof row.word !== 'string' ||
-      typeof row.definition !== 'string'
-    )
-      continue
+    const isValidRow =
+      row !== null &&
+      typeof row === 'object' &&
+      typeof row.word === 'string' &&
+      typeof row.definition === 'string'
+
+    if (!isValidRow) continue
+
     const suggestion = row.word.trim()
     const definition = row.definition.trim()
     const key = suggestion.normalize('NFKC').toLowerCase().replace(/\s+/g, ' ')
 
-    if (!suggestion || !definition || seen.has(key)) continue
+    const isUsableSuggestion =
+      suggestion.length > 0 && definition.length > 0 && !seen.has(key)
+
+    if (!isUsableSuggestion) continue
+
     seen.add(key)
     results.push({ suggestion, definition })
+
     if (results.length === 3) break
   }
 
-  if (!results.length)
+  if (!results.length) {
     throw new Error(
       'The Shortcut returned no valid suggestions with definitions.',
     )
+  }
+
   return results
 }
 
@@ -74,11 +84,13 @@ export const runShortcut = async (
   signal?: AbortSignal,
 ) => {
   signal?.throwIfAborted()
+
   const directory = await mkdtemp(path.join(tmpdir(), 'ai-spell-'))
 
   try {
     const input = path.join(directory, 'input.txt')
     await writeFile(input, text, { encoding: 'utf8', mode: 0o600 })
+
     const output = path.join(directory, 'output.txt')
     const args = [
       'run',
@@ -96,6 +108,7 @@ export const runShortcut = async (
       maxBuffer: 1024 * 1024,
       signal,
     }
+
     const { stdout } = await execute('/usr/bin/shortcuts', args, options)
     let raw = stdout
 
@@ -107,10 +120,12 @@ export const runShortcut = async (
       if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error
     }
 
-    if (!raw.trim())
+    if (!raw.trim()) {
       throw new Error(
         'The Shortcut returned no text. Make sure its final action outputs the JSON response.',
       )
+    }
+
     return parseSuggestions(raw)
   } finally {
     await rm(directory, { recursive: true, force: true })
