@@ -36,10 +36,11 @@ export const parseSuggestions = (raw: string): Suggestion[] => {
     !Array.isArray(response)
   const rows = hasSuggestionsWrapper ? response.suggestions : response
 
-  if (!Array.isArray(rows))
+  if (!Array.isArray(rows)) {
     throw new Error(
       'The Shortcut response must contain an array of suggestions.',
     )
+  }
 
   const seen = new Set<string>()
   const results: Suggestion[] = []
@@ -68,10 +69,11 @@ export const parseSuggestions = (raw: string): Suggestion[] => {
     if (results.length === 3) break
   }
 
-  if (!results.length)
+  if (!results.length) {
     throw new Error(
       'The Shortcut returned no valid suggestions with definitions.',
     )
+  }
 
   return results
 }
@@ -120,10 +122,11 @@ export const runShortcut = async (
       if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error
     }
 
-    if (!raw.trim())
+    if (!raw.trim()) {
       throw new Error(
         'The Shortcut returned no text. Make sure its final action outputs the JSON response.',
       )
+    }
 
     return parseSuggestions(raw)
   } finally {

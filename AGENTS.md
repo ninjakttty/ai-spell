@@ -58,7 +58,7 @@ AI Spell is intentionally a small Raycast utility. Preserve the Raycast → macO
 
 - Prefer guard clauses and early returns to deeply nested conditionals.
 - Never use a bare `return`. Return an explicit value appropriate to the function's contract, such as `null`, `false`, or `undefined`.
-- Omit curly braces for single-statement conditional bodies. Keep simple guard clauses on one line, for example `if (!isValidRow) return null`. Use braces for bodies with multiple statements.
+- Omit curly braces only when the entire conditional and its single-statement body fit on one line, for example `if (!isValidRow) return null`. Use braces whenever the conditional or its body spans multiple lines, even if the body contains just one statement. Always use braces for bodies with multiple statements.
 - Extract compound or multiline conditions into descriptively named boolean variables so `if` statements stay simple. For example, compute `isValidRow` from the row checks, then use `if (!isValidRow)` as the guard clause. Keep straightforward single checks inline.
 - Keep functions focused on a single responsibility and control flow easy to follow.
 - Choose the simplest implementation that meets the requirements. Avoid speculative abstractions and premature optimization.

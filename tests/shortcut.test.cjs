@@ -138,11 +138,12 @@ for (const mode of ['file', 'stdout', 'blank-file']) {
         assert.equal(options.timeout, 120_000)
         assert.equal(options.maxBuffer, 1024 * 1024)
 
-        if (mode !== 'stdout')
+        if (mode !== 'stdout') {
           await fs.writeFile(
             output,
             mode === 'file' ? json([row('their')]) : '  ',
           )
+        }
 
         return {
           stdout: mode === 'file' ? 'ignored stdout' : json([row('there')]),
