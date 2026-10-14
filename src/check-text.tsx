@@ -39,7 +39,7 @@ export const Command = ({
 
         if (!controller.signal.aborted) setSuggestions(results)
       } catch (cause) {
-        if (controller.signal.aborted) return
+        if (controller.signal.aborted) return undefined
 
         const message = cause instanceof Error ? cause.message : String(cause)
         setError(message)

@@ -26,6 +26,18 @@ export default [
       'prefer-arrow-callback': 'error',
       'func-style': ['error', 'expression'],
       'no-nested-ternary': 'error',
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'ReturnStatement[argument=null]',
+          message:
+            'Return an explicit value, such as undefined, instead of a bare return.',
+        },
+        {
+          selector: 'IfStatement > BlockStatement[body.length=1]',
+          message: 'Omit braces around a single-statement conditional body.',
+        },
+      ],
     },
   },
 ]

@@ -1,6 +1,15 @@
 # Repository instructions
 
+These instructions apply throughout this repository unless a more specific `AGENTS.md` provides different guidance. Keep this file at the project root when adopting it.
+
 AI Spell is intentionally a small Raycast utility. Preserve the Raycast → macOS Shortcuts → Apple Intelligence integration and the existing functionality. Do not replace Shortcuts with a direct model API.
+
+## Follow the project
+
+- Follow established project conventions, architecture, formatting, and tooling. They take precedence over the default preferences below.
+- Read relevant project instructions and nearby code before making changes.
+- Use the project's existing package manager, dependencies, and validation commands.
+- Stay framework-agnostic: do not introduce a framework, library, or architectural pattern without a concrete need.
 
 ## Formatting and code style
 
@@ -48,6 +57,8 @@ AI Spell is intentionally a small Raycast utility. Preserve the Raycast → macO
 ## Implementation
 
 - Prefer guard clauses and early returns to deeply nested conditionals.
+- Never use a bare `return`. Return an explicit value appropriate to the function's contract, such as `null`, `false`, or `undefined`.
+- Omit curly braces for single-statement conditional bodies. Keep simple guard clauses on one line, for example `if (!isValidRow) return null`. Use braces for bodies with multiple statements.
 - Extract compound or multiline conditions into descriptively named boolean variables so `if` statements stay simple. For example, compute `isValidRow` from the row checks, then use `if (!isValidRow)` as the guard clause. Keep straightforward single checks inline.
 - Keep functions focused on a single responsibility and control flow easy to follow.
 - Choose the simplest implementation that meets the requirements. Avoid speculative abstractions and premature optimization.
