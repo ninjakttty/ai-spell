@@ -37,20 +37,19 @@ export function parseSuggestions(raw: string): Suggestion[] {
 }
 
 export async function runShortcut(text: string, shortcutName: string, signal?: AbortSignal): Promise<Suggestion[]> {
+  signal?.throwIfAborted()
   const directory = await mkdtemp(path.join(tmpdir(), 'ai-spell-'))
   try {
     const input = path.join(directory, 'input.txt')
     await writeFile(input, text, { encoding: 'utf8', mode: 0o600 })
-    const args = ['run', shortcutName, '--input-path', input, '--output-type', 'public.plain-text']
+    const output = path.join(directory, 'output.txt')
+    const args = ['run', shortcutName, '--input-path', input, '--output-path', output, '--output-type', 'public.plain-text']
     const options = { encoding: 'utf8' as const, timeout: 120_000, maxBuffer: 1024 * 1024, signal }
     const { stdout } = await execute('/usr/bin/shortcuts', args, options)
-    if (stdout.trim() && !stdout.trimStart().startsWith('{\\rtf')) return parseSuggestions(stdout)
-    // Some Shortcuts only export their result when given an output path.
-    const output = path.join(directory, 'output.txt')
-    const fallback = await execute('/usr/bin/shortcuts', [...args, '--output-path', output], options)
-    let raw = fallback.stdout
+    let raw = stdout
     try {
-      raw = (await readFile(output, 'utf8')) || raw
+      const fileOutput = await readFile(output, 'utf8')
+      if (fileOutput.trim()) raw = fileOutput
     } catch (error) {
       if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error
     }

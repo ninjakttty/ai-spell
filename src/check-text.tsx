@@ -36,7 +36,7 @@ export default function Command({ arguments: args }: LaunchProps<{ arguments: { 
   const retry = <Action title="Try Again" onAction={() => setAttempt((value) => value + 1)} shortcut={{ modifiers: ['cmd'], key: 'r' }} />
   return (
     <List isLoading={loading} navigationTitle="Spelling Suggestions" searchBarPlaceholder="Filter suggestions…">
-      <List.EmptyView title={loading ? 'Checking spelling…' : 'Could not check spelling'} description={error || `Running ${shortcutName}`} actions={!loading ? <ActionPanel>{retry}</ActionPanel> : undefined} />
+      <List.EmptyView title={loading ? 'Checking spelling…' : error ? 'Could not check spelling' : 'No matching suggestions'} description={loading ? `Running ${shortcutName}` : error || 'Try a different filter.'} actions={!loading ? <ActionPanel>{retry}</ActionPanel> : undefined} />
       <List.Section title="Suggestions" subtitle={!loading && suggestions.length < 3 ? `${suggestions.length} distinct suggestions returned` : undefined}>
         {suggestions.map((item) => (
           <List.Item
