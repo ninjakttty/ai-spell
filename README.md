@@ -70,11 +70,11 @@ Suggestions appear with brief definitions:
 
 Select a result and use:
 
-| Key | Action |
-| --- | --- |
-| Enter | Copy the selected correction |
+| Key       | Action                                            |
+| --------- | ------------------------------------------------- |
+| Enter     | Copy the selected correction                      |
 | Cmd+Enter | Paste the selected correction into the active app |
-| Cmd+R | Run the check again |
+| Cmd+R     | Run the check again                               |
 
 Typing in the results search bar filters suggestions; it does not submit new text to the model. Run the command again to check different input. Only the selected suggestion is copied or pasted, so review how it fits your original text.
 
@@ -117,13 +117,17 @@ The extension uses TypeScript, React, Raycast's API, and Node.js subprocess/file
 Each request uses a unique temporary directory and an input file with owner-only permissions. A single CLI invocation requests a plain-text output file; nonempty file output takes precedence over stdout. Temporary files are removed in `finally`. Cancellation aborts the CLI process and prevents stale UI updates; it does not establish that every downstream model operation stops immediately. The subprocess output buffer is capped at 1 MiB. The extension contains no explicit logging of submitted text or model responses.
 
 ```sh
+npm run format:check # check formatting
+npm run lint         # ESLint checks
 npm run typecheck  # strict TypeScript checks
 npm test           # parser and runner tests, without invoking a real Shortcut
 npm run build      # compile the Raycast extension
 npm run dev        # live development in Raycast
 ```
 
-Tests use Node's built-in test runner and the existing TypeScript compiler. They cover response formats, validation, deduplication, ranking, output-file/stdout handling, cancellation, and cleanup after simulated failures. They do not verify model quality, macOS import dialogs, or Raycast copy/paste behavior. No separate linter is configured.
+Tests use Node's built-in test runner and the existing TypeScript compiler. They cover response formats, validation, deduplication, ranking, output-file/stdout handling, cancellation, and cleanup after simulated failures. They do not verify model quality, macOS import dialogs, or Raycast copy/paste behavior.
+
+Prettier enforces no semicolons, single quotes in JavaScript and TypeScript, double quotes in JSX, two-space indentation, and trailing commas. Run `npm run format` to apply formatting. ESLint checks the source, tests, and lint configuration using its recommended JavaScript and TypeScript rules, plus rules for arrow functions, `const`, and avoiding nested ternaries. Generated Raycast declarations, the lockfile, and assets are excluded from formatting; generated declarations are also excluded from linting.
 
 The editable icon source and PNG are in `assets/`. If you change the Shortcut in Shortcuts, export it and sign the export for sharing:
 
